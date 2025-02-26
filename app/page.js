@@ -66,9 +66,7 @@ export default function Home() {
   //delete items from database
   const deleteItem = async (id) => {
     await deleteDoc(doc(db,'items',id))
-
   }
-
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-between sm:p-24 p-4 text-white'>

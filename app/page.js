@@ -14,7 +14,6 @@ import {
   } from "firebase/firestore";
 import { db } from "./firebase";
 
-
 export default function Home() {
   const [items, setItems] = useState([
     // { name: 'Coffee', price: 4.95 },
@@ -41,7 +40,12 @@ export default function Home() {
     }
   }
    //read items from database
+    //查询 Firestore 数据 → query(collection(db, "items"))
+    // 监听 Firestore 变化 → onSnapshot(q, callback)
+    // 遍历 Firestore 数据 → querySnapshot.forEach(doc => {...})
+    // 避免内存泄漏 → unsubscribe() 取消监听
   useEffect(()=> {
+    //// 获取 Firestore "items" 集合
     const q = query(collection(db, "items"))
     const unsubscribe = onSnapshot(q, (querySnapshot)=> {
       let itemsArr = [];
@@ -49,7 +53,7 @@ export default function Home() {
       querySnapshot.forEach((doc) => {
         itemsArr.push({...doc.data(), id: doc.id})
       })
-      setItems(itemsArr);
+      setItems(itemsArr);//// 更新 React 状态
 
       //read total from itemsArr
       //reduce() Round all the numbers and display the sum
@@ -59,7 +63,7 @@ export default function Home() {
         setTotal(totalPrice)
       }
       calculateTotal()
-      return ()=> unsubscribe();
+      return ()=> unsubscribe();//// 组件卸载时取消监听
     })
   },[])
 
